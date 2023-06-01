@@ -9,6 +9,8 @@ const PORT = process.env.PORT || 4000;
 
 app.use(express.json());
 
+app.use(checkSecret);
+
 app.use("/todos", todosRouter);
 
 // Start the server
