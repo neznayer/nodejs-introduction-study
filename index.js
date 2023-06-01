@@ -3,6 +3,7 @@ const express = require("express");
 const fs = require("fs/promises");
 // Initialize express app
 const app = express();
+const mongoose = require("mongoose");
 
 const PORT = process.env.PORT || 4000;
 
@@ -96,6 +97,17 @@ app.delete("/todos/:id", isIdExists, async function (req, res) {
 });
 
 // Start the server
-app.listen(PORT, function () {
-  console.log(`App is listening on port ${PORT}!`);
-});
+const start = async () => {
+  try {
+    app.listen(PORT, async () => {
+      console.log(`Server started on port ${PORT}`);
+      await mongoose.connect(process.env.MONGO_URL);
+      console.log("Connected to MongoDB");
+    });
+  } catch (error) {
+    console.error(error);
+    process.exit(1);
+  }
+};
+
+start();
