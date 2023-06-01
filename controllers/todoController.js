@@ -1,60 +1,53 @@
-const fs = require("fs/promises");
+const { Todo } = require("../models/Todo");
 
 async function getAllTodos(req, res) {
   // get the todos list here,
-  const todos = JSON.parse(await fs.readFile("todos.json", "utf8"));
+
+  const todos = await Todo.find({});
   return res.status(200).json(todos);
 }
 
 async function getTodoById(req, res) {
   // get the todo item by id
-  const todos = JSON.parse(await fs.readFile("todos.json", "utf8"));
 
-  const todo = todos.find((todo) => todo.id === parseInt(req.params.id));
+  const todo = await Todo.findById(req.params.id);
 
   return res.status(200).json(todo);
 }
 
 async function createNewTodo(req, res) {
-  const newTodo = req.body;
+  const newTodoJson = req.body;
 
-  const todos = JSON.parse(await fs.readFile("todos.json", "utf8"));
-  const newTodoId = todos.length + 1;
-  newTodo.id = newTodoId;
-  todos.push(newTodo);
+  const newTodo = new Todo(newTodoJson);
+
   try {
-    await fs.writeFile("todos.json", JSON.stringify(todos));
+    await newTodo.save();
+    const todos = await Todo.find({});
+    return res.status(201).json(todos);
   } catch (error) {
     return res.status(500).send("Something went wrong");
   }
-
-  return res.status(201).json(todos);
 }
 
 async function updateTodoById(req, res) {
-  const todos = JSON.parse(await fs.readFile("todos.json", "utf8"));
-  const todoIndex = todos.findIndex(
-    (todo) => todo.id === parseInt(req.params.id)
-  );
-  const todo = todos[todoIndex];
-  const updatedTodo = { ...todo, ...req.body };
-  todos[todoIndex] = updatedTodo;
+  const id = req.params.id;
+  const updatedTodoJson = req.body;
+
   try {
-    await fs.writeFile("todos.json", JSON.stringify(todos));
+    const updatedTodo = await Todo.findByIdAndUpdate(id, updatedTodoJson, {
+      returnDocument: "after",
+    });
+
+    return res.status(200).json(updatedTodo);
   } catch (error) {
     return res.status(500).send("Something went wrong");
   }
-  return res.status(200).json(updatedTodo);
 }
 
 async function deleteTodoById(req, res) {
-  const todos = JSON.parse(await fs.readFile("todos.json", "utf8"));
-  const todoIndex = todos.findIndex(
-    (todo) => todo.id === parseInt(req.params.id)
-  );
-  todos.splice(todoIndex, 1);
   try {
-    await fs.writeFile("todos.json", JSON.stringify(todos));
+    await Todo.findByIdAndDelete(req.params.id);
+    const todos = await Todo.find({});
     return res.status(200).json(todos);
   } catch (error) {
     return res.status(500).send("Something went wrong");

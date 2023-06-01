@@ -1,8 +1,8 @@
-const fs = require("fs/promises");
+const { Todo } = require("../models/Todo");
 
 async function isIdExists(req, res, next) {
-  const todos = JSON.parse(await fs.readFile("todos.json", "utf8"));
-  const todo = todos.find((todo) => todo.id === parseInt(req.params.id));
+  const id = req.params.id;
+  const todo = await Todo.findById(id);
   if (!todo) {
     return res.status(404).send("The todo item was not found");
   }

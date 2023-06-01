@@ -1,5 +1,4 @@
 const express = require("express");
-const fs = require("fs/promises");
 const {
   getAllTodos,
   createNewTodo,
@@ -14,11 +13,11 @@ const router = express.Router();
 
 router.get("/", getAllTodos);
 
-router.get("/:id", isIdExists, getTodoById);
+router.get("/:id", getTodoById);
 
 router.post("/", validateNewTodo, createNewTodo);
 
-router.put("/:id", isIdExists, updateTodoById);
+router.put("/:id", updateTodoById);
 
 router.delete("/:id", isIdExists, deleteTodoById);
 

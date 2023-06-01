@@ -1,5 +1,1 @@
-[
-  { "id": 1, "title": "Learn Node.js", "completed": true },
-  { "id": 2, "title": "Learn React", "completed": false },
-  { "id": 3, "title": "Climb mount Fuji", "completed": true }
-]
+[{"id":1,"title":"Learn Node.js","completed":true},{"id":2,"title":"Learn React","completed":false},{"id":3,"title":"Climb mount Fuji","completed":true},{"title":"New todo","completed":false,"id":4}]
