@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const todosRouter = require("./routes/todos");
+const checkSecret = require("./middleware/checkSecret");
 
 // Initialize express app
 const app = express();
