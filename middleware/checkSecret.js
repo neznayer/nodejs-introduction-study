@@ -1,5 +1,5 @@
 function checkSecret(req, res, next) {
-  const secret = req.headers["X-SECRET"];
+  const secret = req.headers["x-secret"];
   if (secret === process.env.SECRET_KEY) {
     return next();
   }
