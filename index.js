@@ -21,6 +21,15 @@ app.get("/todos", function (req, res) {
   return res.status(200).json(todos);
 });
 
+app.get("/todos/:id", function (req, res) {
+  // get the todo item by id
+  const todo = todos.find((todo) => todo.id === parseInt(req.params.id));
+  if (!todo) {
+    return res.status(404).send("The todo item was not found");
+  }
+  return res.status(200).json(todo);
+});
+
 // Start the server
 app.listen(PORT, function () {
   console.log(`App is listening on port ${PORT}!`);
